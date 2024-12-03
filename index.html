@@ -3,40 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flash Estroboscópico</title>
+    <title>Flash Estroboscópico en Pantalla Completa</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
-            transition: background-color 0.02s ease; /* Transición rápida para el efecto flash */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            transition: background-color 0.05s ease;
+            overflow: hidden;
+        }
+        #fullscreen-btn, #exit-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #fullscreen-btn {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        #fullscreen-btn:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        #exit-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ff0000;
+            color: #ffffff;
+            display: none;
+        }
+        #exit-btn:hover {
+            background-color: #cc0000;
         }
     </style>
 </head>
 <body>
 
-<script>
-    // Colores blanco y negro para el efecto estroboscópico
-    const colors = ["#ffffff", "#000000"]; // Blanco y negro
-    
-    // Duración en milisegundos para cada color (alternancia rápida)
-    const interval = 80; // Cambia cada 100 ms (0.1 segundos)
+<!-- Botón para activar pantalla completa -->
+<button id="fullscreen-btn">Pantalla Completa</button>
+<!-- Botón para salir de pantalla completa -->
+<button id="exit-btn">X</button>
 
-    let currentIndex = 0; // Índice para alternar entre blanco y negro
+<script>
+    const colors = ["#ffffff", "#000000"];
+    const interval = 100;
+    let currentIndex = 0;
 
     // Función para alternar el color de fondo
     function toggleFlash() {
         document.body.style.backgroundColor = colors[currentIndex];
-        
-        // Alterna el índice entre 0 y 1
         currentIndex = (currentIndex + 1) % colors.length;
-
-        // Llama a la función de nuevo después del intervalo definido
         setTimeout(toggleFlash, interval);
     }
-
-    // Inicia el efecto estroboscópico
     toggleFlash();
+
+    // Función para abrir pantalla completa
+    function openFullscreen() {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+        }
+        document.getElementById('fullscreen-btn').style.display = 'none';
+        document.getElementById('exit-btn').style.display = 'block';
+    }
+
+    // Función para salir de pantalla completa
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        document.getElementById('fullscreen-btn').style.display = 'block';
+        document.getElementById('exit-btn').style.display = 'none';
+    }
+
+    // Asignar eventos a los botones
+    document.getElementById('fullscreen-btn').addEventListener('click', openFullscreen);
+    document.getElementById('exit-btn').addEventListener('click', exitFullscreen);
 </script>
 
 </body>
