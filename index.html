@@ -3,102 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flash Estroboscópico en Pantalla Completa</title>
+    <title>Flash Estroboscópico</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            background-color: black;
+            justify-content: center;
             transition: background-color 0.05s ease;
-            overflow: hidden;
+            background-color: black;
+            cursor: pointer; /* Indica que se puede hacer clic */
         }
-        #fullscreen-btn, #exit-btn {
-            padding: 15px 30px;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 1000;
-            border: none;
+
+        #message-box {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 40px;
+            font-size: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #fullscreen-btn {
-            background-color: #ffffff;
-            color: #000000;
-        }
-        #fullscreen-btn:hover {
-            background-color: #000000;
-            color: #ffffff;
-        }
-        #exit-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #ff0000;
-            color: #ffffff;
-            display: none;
-        }
-        #exit-btn:hover {
-            background-color: #cc0000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
 
-<!-- Botón para activar pantalla completa -->
-<button id="fullscreen-btn">Pantalla Completa</button>
-<!-- Botón para salir de pantalla completa -->
-<button id="exit-btn">X</button>
+    <!-- Cuadro de mensaje -->
+    <div id="message-box">
+        ¡Sube el brillo de tu pantalla al máximo!
+        <br>(Clic para continuar)
+    </div>
 
 <script>
+    // Colores blanco y negro para el efecto estroboscópico
     const colors = ["#ffffff", "#000000"];
-    const interval = 100;
+    const interval = 100; // Intervalo en milisegundos
     let currentIndex = 0;
 
-    // Función para alternar el color de fondo
+    // Alterna el color de fondo
     function toggleFlash() {
         document.body.style.backgroundColor = colors[currentIndex];
         currentIndex = (currentIndex + 1) % colors.length;
         setTimeout(toggleFlash, interval);
     }
-    toggleFlash();
 
-    // Función para abrir pantalla completa
-    function openFullscreen() {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
+    // Ocultar el mensaje y comenzar el efecto al hacer clic en cualquier parte
+    document.body.addEventListener("click", function() {
+        const messageBox = document.getElementById("message-box");
+        if (messageBox) {
+            messageBox.style.display = "none"; // Oculta el cuadro de mensaje
         }
-        document.getElementById('fullscreen-btn').style.display = 'none';
-        document.getElementById('exit-btn').style.display = 'block';
-    }
-
-    // Función para salir de pantalla completa
-    function exitFullscreen() {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-        document.getElementById('fullscreen-btn').style.display = 'block';
-        document.getElementById('exit-btn').style.display = 'none';
-    }
-
-    // Asignar eventos a los botones
-    document.getElementById('fullscreen-btn').addEventListener('click', openFullscreen);
-    document.getElementById('exit-btn').addEventListener('click', exitFullscreen);
+        toggleFlash(); // Inicia el efecto de flash
+    }, { once: true }); // El evento se ejecuta solo una vez
 </script>
 
 </body>
